@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import axios from 'axios';
 const LoginPage = () => {
   const [loginData,setLoginData]=useState({
     username:"",
@@ -10,6 +11,16 @@ const LoginPage = () => {
     let newLoginData=loginData;
     newLoginData[event.target.name]=event.target.value;
     console.log(newLoginData);
+    setLoginData(newLoginData);
+  }
+  function handleLogin(event){
+    event.preventDefault();
+    axios.post("http://127.0.0.1:8000/api/login",loginData).then((response)=>{
+      console.log(response.data);
+    }).catch((err)=>{
+      console.log(err);
+    });
+
   }
   return (
     <section className="vh-100">
@@ -20,7 +31,7 @@ const LoginPage = () => {
           className="img-fluid" alt="Sample image"/>
       </div>
       <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="form-outline mb-4">
             <input type="text" id="form3Example3" className="form-control form-control-lg"
               placeholder="Enter your username" onInput={getInput}  name='username'/>
@@ -35,7 +46,7 @@ const LoginPage = () => {
 
 
           <div className="text-center text-lg-start mt-4 pt-2">
-            <button type="button" className="btn btn-primary btn-lg"
+            <button type="submit" className="btn btn-primary btn-lg"
               style={{paddingLeft: 2.5 + "rem", paddingRight: 2.5 + "rem"}}>Login</button>
             <p className="small fw-bold mt-2 pt-1 mb-0 text-primary">Don't have an account? <a href="#!"
                 className="link-success">Register</a></p>
