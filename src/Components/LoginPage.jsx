@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [loginData,setLoginData]=useState({
     username:"",
     password:""
   });
+  let navigate=useNavigate();
   function getInput(event){
     
     let newLoginData=loginData;
@@ -15,8 +17,12 @@ const LoginPage = () => {
   }
   function handleLogin(event){
     event.preventDefault();
-    axios.post("http://127.0.0.1:8000/api/login",loginData).then((response)=>{
+    axios.post("api/login",loginData).then((response)=>{
       console.log(response.data);
+      if(response.data.success===true){
+          window.sessionStorage.setItem("auth_token",response.data.access_token);
+          navigate("/");
+      }
     }).catch((err)=>{
       console.log(err);
     });
